@@ -17,10 +17,29 @@ module.exports = function (config) {
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, '../coverage'),
-      reports: ['html', 'lcovonly'],
-      fixWebpackSourcePaths: true
+      reports: ['html', 'lcovonly', 'text', 'text-summary', 'cobertura'],
+      fixWebpackSourcePaths: true,
+      thresholds: {
+        statements: 80,
+        lines: 80,
+        branches: 80,
+        functions: 80
+      }
     },
-    reporters: ['progress', 'kjhtml'],
+    coverageReporter: {
+      type : 'cobertura'
+    },
+    remapIstanbulReporter: {
+      reports: {
+        cobertura: './coverage/cobertura.xml'
+      }
+    },
+    remapCoverageReporter: {
+      cobertura: './coverage/cobertura.xml',
+     },
+    reporters: config.angularCli && config.angularCli.codeCoverage
+    ? ['progress', 'coverage-istanbul']
+    : ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
